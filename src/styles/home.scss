@@ -1,0 +1,43 @@
+.background-home {
+    height: 100vh;
+    padding: 0 !important;
+    background: url(../img/bianca-ackermann-IGTlDjRN3kc-unsplash.jpg) no-repeat center;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.botones-home{
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.boton3 {
+    color: #f9fbfc !important;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 0.5em 1.2em;
+    background: rgba(255, 255, 255, 0);
+    border: 2px solid;
+    border-color: #feffff;
+    transition: all 1s ease;
+    position: relative;
+  }
+.boton3:hover {
+    background: rgb(177, 180, 7);
+    color: #fff !important;
+  }
+.boton4 {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 0.5em 1.2em;
+    background:  rgb(177, 180, 7);
+    border: 2px solid;
+    border-color:  rgb(177, 180, 7);
+    position: relative;
+  }
+.boton4:hover {
+    color: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 4px 16px  rgb(177, 180, 7);
+    transition: all 0.2s ease;
+  }
