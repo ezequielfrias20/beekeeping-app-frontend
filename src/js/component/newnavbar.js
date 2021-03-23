@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../styles/navbar.scss";
+import "../../styles/newnavbar.scss";
 
-export const Navbar = () => {
+export const NewNavbar = () => {
 	return (
 		<nav className="fill">
 			<ul>
 				<li>
-					<a href="/">Home</a>
+					<a href="#">Home</a>
 				</li>
 				<li>
 					<a href="#">About</a>
@@ -16,10 +16,10 @@ export const Navbar = () => {
 					<a href="#">Downloads</a>
 				</li>
 				<li>
-					<a href="/login">Iniciar Sesión</a>
+					<a href="#">Iniciar Sesión</a>
 				</li>
 				<li>
-					<a href="signup">Regístrate</a>
+					<a href="#">Regístrate</a>
 				</li>
 			</ul>
 		</nav>
