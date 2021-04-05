@@ -1,8 +1,49 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { Context } from "../store/appContext";
+import { Link, useHistory } from "react-router-dom";
 import { Navbar } from "../component/navbar";
 import "../../styles/signup.scss";
 
 export const Login = () => {
+	const { store, actions } = useContext(Context);
+	const history = useHistory();
+
+	//--------------------------------------------------------/
+	//OBJETO-HOOK-FUNCIÓN PARA GUARDAR DATOS DEL LOGIN
+	//--------------------------------------------------------/
+	//Objeto form data almacenará información
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	//Hook boolean para mostrar o no contraseña
+	const [shown, setShown] = useState(false);
+
+	// //función que guarda los datos en el estado de registro a medida que son completados,
+	// //cambian el estado inicial vacío a los valores
+	const changeEmail = e => {
+		setEmail(e.target.value);
+	};
+	const changePassword = e => {
+		setPassword(e.target.value);
+	};
+	const checkLogin = async e => {
+		if (email != "" && password != "") {
+			let success = await actions.loginUser(email, password);
+			e.preventDefault();
+			if (success) {
+				if (store.token != "") {
+					console.log("usuario autenticado");
+					history.push("/profile");
+				} else {
+					alert("usuario no registrado");
+				}
+			} else {
+				alert("no se pueden dejar campos vacíos");
+			}
+		}
+	};
+	//función para controlar showpassword
+	const switchShown = () => setShown(!shown);
+
 	return (
 		<>
 			<div className="container fondo-signup ">
@@ -26,7 +67,7 @@ export const Login = () => {
 											placeholder="Correo electrónico..."
 											name="email"
 											pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-											onChange=""
+											onChange={changeEmail}
 											required
 										/>
 									</div>
@@ -41,7 +82,7 @@ export const Login = () => {
 											placeholder="Contraseña..."
 											name="password1"
 											required
-											onChange=""
+											onChange={changePassword}
 										/>
 										<div className="col-1 btn-light align-self-center mb-3" onClick="">
 											<i className="far fa-eye" />
@@ -52,7 +93,7 @@ export const Login = () => {
 										className="btn btn-warning col-6 my-2 my-sm-0 disable"
 										disabled=""
 										aria-disabled=""
-										onClick="">
+										onClick={checkLogin}>
 										Iniciar sesion
 									</button>
 								</div>

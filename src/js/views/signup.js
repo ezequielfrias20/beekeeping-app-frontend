@@ -1,8 +1,102 @@
-import React from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Navbar } from "../component/navbar";
 import "../../styles/signup.scss";
+import { Context } from "../store/appContext.js";
+import { useHistory } from "react-router-dom";
 
 export const Signup = () => {
+	//Declaración de funciones principales
+	//--------------------------------------------------------/
+	//usa Store y actions del contexto
+	const { store, actions } = useContext(Context);
+	//--------------------------------------------------------/
+	//OBJETO-HOOK-FUNCIÓN PARA GUARDAR DATOS DEL USUARIO
+	//--------------------------------------------------------/
+	//Objeto form data almacenará información
+	const history = useHistory();
+	const formData = {
+		email: "",
+		name: "",
+		password: ""
+	};
+	const [signup, setSignup] = useState(formData);
+
+	//Hook estado para guardar info de inputs
+	//función que guarda los datos en el estado de registro a medida que son completados,
+	//cambian el estado inicial vacío a los valores
+	function changeSignUp(e) {
+		setSignup({
+			...signup,
+			[e.target.name]: e.target.value
+		});
+		e.preventDefault();
+	}
+
+	const saveSignUp = async e => {
+		e.preventDefault();
+		console.log(signup);
+		let success = await actions.addUser(signup);
+		if (success) {
+			console.log("Su usuario ha sido creado");
+			history.push("/login");
+		} else {
+			console.log("Su usuario no pudo ser creado");
+		}
+	};
+
+	//--------------------------------------------------------/---------------------------/
+	//OBJETO-HOOK-FUNCIÓN PARA VALIDAR CONTRASEÑAS COINCIDENTES y MOSTRAR OCULTAR PASSWORD
+	//--------------------------------------------------------/---------------------------/
+	// //Hook de password y confirmación de password
+	const [passwordOriginal, setPasswordOriginal] = useState("");
+	const [passwordConfirm, setPasswordConfirm] = useState("");
+	//Hook boolean para mostrar o no contraseña
+	const [shown, setShown] = useState(false);
+	// //Función para guardar información de contraseñas
+	const changePasswordO = e => {
+		setPasswordOriginal(e.target.value);
+		e.preventDefault();
+	};
+	const changePasswordC = e => {
+		setPasswordConfirm(e.target.value);
+		e.preventDefault();
+	};
+
+	// //Estado del botón de registro
+	const [buttonActive, setButtonActive] = useState(true);
+	//manejar evento de presionar enter en password y validar contraseñas
+	useEffect(
+		() => {
+			const validatePassword = () => {
+				if (passwordOriginal === "" && passwordConfirm === "") {
+					setButtonActive(true);
+				}
+				if (passwordOriginal === passwordConfirm) {
+					setButtonActive(false); //cambia estado del botón a booleano True
+				} else {
+					form1.inputPasswordConfirm.value = ""; //limpia campos
+					form1.inputPassword.value = ""; //limpia campos
+					form1.inputPassword.focus(); //posiciona de nuevo sobre password
+					setButtonActive(true); //cambia estado del botón a booleano False
+					alert("La contraseña no coincide");
+				}
+			};
+			validatePassword();
+		},
+		[passwordConfirm]
+	);
+	//Función controladora de mostrar contraseña
+	const switchShown = () => setShown(!shown);
+
+	//--------------------------------------------------------/
+	//OBJETO-HOOK-FUNCIÓN PARA BUSCAR PAÍS EN API
+	//--------------------------------------------------------/
+	//enlace de API
+
+	//Hook para guardar la búsqueda
+
+	//Función para búsqueda del cliente de un país
+
 	return (
 		<>
 			<div className="container fondo-signup ">
@@ -26,7 +120,7 @@ export const Signup = () => {
 											placeholder="Correo electrónico..."
 											name="email"
 											pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-											onChange=""
+											onChange={changeSignUp}
 											required
 										/>
 									</div>
@@ -35,9 +129,9 @@ export const Signup = () => {
 											type="text"
 											className="form-control mb-3 bg-light border border-warning rounded-pill"
 											id="inputAddress"
-											name="user_name"
+											name="name"
 											placeholder="Nombre de usuario..."
-											onChange=""
+											onChange={changeSignUp}
 											required
 										/>
 									</div>
@@ -51,7 +145,7 @@ export const Signup = () => {
 											placeholder="Contraseña..."
 											name="password1"
 											required
-											onChange=""
+											onChange={changePasswordO}
 										/>
 										<div className="col-1 btn align-self-center mb-3" onClick="">
 											<i className="far fa-eye icon" />
@@ -64,8 +158,8 @@ export const Signup = () => {
 											id="inputPasswordConfirm"
 											placeholder="Confirmar contraseña..."
 											name="password"
-											onChange=""
-											onBlur="{changePasswordC}"
+											onChange={changeSignUp}
+											onBlur={changePasswordC}
 											required
 										/>
 										<div className="col-1 btn align-self-center mb-3" onClick="">
@@ -77,7 +171,7 @@ export const Signup = () => {
 										className="btn btn-warning col-6 my-2 my-sm-0 disable"
 										disabled=""
 										aria-disabled=""
-										onClick="">
+										onClick={saveSignUp}>
 										Registrar
 									</button>
 								</div>
